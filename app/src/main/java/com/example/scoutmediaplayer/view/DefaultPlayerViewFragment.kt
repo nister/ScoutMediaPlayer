@@ -1,4 +1,4 @@
-package com.example.scoutmediaplayer.ui
+package com.example.scoutmediaplayer.view
 
 import android.content.ComponentName
 import android.os.Bundle
@@ -6,23 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.databinding.DataBindingUtil
 import androidx.media3.common.MediaItem
-import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import androidx.media3.ui.PlayerView
 import com.example.scoutmediaplayer.PlaybackService
 import com.example.scoutmediaplayer.R
+import com.example.scoutmediaplayer.databinding.FragmentDefaultPlayerViewBinding
+import com.example.scoutmediaplayer.viewmodel.PlayerFragmentViewModel
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,6 +29,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class DefaultPlayerViewFragment : Fragment() {
 
+    private lateinit var viewBinding: FragmentDefaultPlayerViewBinding
     private lateinit var playerView: PlayerView
     private lateinit var controllerFuture: ListenableFuture<MediaController>
     private lateinit var sessionToken: SessionToken
@@ -81,7 +75,9 @@ class DefaultPlayerViewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_default_player_view, container, false)
+        viewBinding = FragmentDefaultPlayerViewBinding.inflate(layoutInflater, container, false)
+        viewBinding.viewModel = PlayerFragmentViewModel()
+        return viewBinding.root
     }
 
     companion object {

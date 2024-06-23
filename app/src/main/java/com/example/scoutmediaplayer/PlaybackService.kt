@@ -97,9 +97,6 @@ class PlaybackService : MediaSessionService() {
         mediaSession = MediaSession.Builder(this, player).build()
         player.playWhenReady = true
         player.prepare()
-//        player.setMediaItem(MediaItem.fromUri("https://github.com/rafaelreis-hotmart/Audio-Sample-files/raw/master/sample.mp3"))
-//        player.prepare()
-//        player.seekTo(1, 0);
     }
 
     override fun onDestroy() {
@@ -118,7 +115,8 @@ class PlaybackService : MediaSessionService() {
     override fun onBind(intent: Intent?): IBinder? {
         return super.onBind(intent)
         //custom binder breaks media session controls
-        //return mBinder
+//        super.onBind(intent)
+//        return mBinder
     }
 
     enum class IntentType {

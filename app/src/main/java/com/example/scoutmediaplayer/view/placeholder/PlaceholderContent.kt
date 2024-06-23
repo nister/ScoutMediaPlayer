@@ -1,4 +1,4 @@
-package com.example.scoutmediaplayer.ui.placeholder
+package com.example.scoutmediaplayer.view.placeholder
 
 import java.util.ArrayList
 import java.util.HashMap

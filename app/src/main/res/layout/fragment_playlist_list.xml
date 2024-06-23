@@ -4,15 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="android.view.View" />
+        <variable
+            name="viewModel"
+            type="com.example.scoutmediaplayer.viewmodel.PlaylistFragmentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@color/cardview_light_background"
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.PlaylistFragment">
+        android:background="@color/cardview_light_background"
+        tools:context=".view.PlaylistFragment">
 
         <TextView
             android:id="@+id/playlist_lib_title"
@@ -26,17 +29,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:background="@android:color/holo_purple"
             android:id="@+id/playlist_recyclerview"
             android:name="com.example.scoutmediaplayer.ui.PlaylistFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:background="@android:color/holo_purple"
             app:layoutManager="LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/playlist_controls"
             app:layout_constraintTop_toBottomOf="@id/playlist_lib_title"
-            tools:context=".ui.PlaylistFragment"
+            tools:context=".view.PlaylistFragment"
             tools:listitem="@layout/fragment_playlist_item" />
 
         <LinearLayout
@@ -49,15 +52,17 @@
 
             <ImageView
                 android:id="@+id/playlist_add"
-                android:src="@android:drawable/ic_menu_add"
                 android:layout_width="75dp"
-                android:layout_height="75dp"/>
+                android:layout_height="75dp"
+                android:onClick="@{()->viewModel.addSongs()}"
+                android:src="@android:drawable/ic_menu_add" />
 
             <ImageView
                 android:id="@+id/playlist_clear"
-                android:src="@android:drawable/ic_notification_clear_all"
                 android:layout_width="75dp"
-                android:layout_height="75dp"/>
+                android:layout_height="75dp"
+                android:onClick="@{()->viewModel.clearPlaylist()}"
+                android:src="@android:drawable/ic_notification_clear_all" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

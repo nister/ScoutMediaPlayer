@@ -1,22 +1,18 @@
-package com.example.scoutmediaplayer.ui
+package com.example.scoutmediaplayer.view
 
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.media3.exoplayer.ExoPlayer
-import com.example.scoutmediaplayer.R
 import com.example.scoutmediaplayer.data.Song
 import com.example.scoutmediaplayer.databinding.FragmentPlaylistListBinding
 import com.example.scoutmediaplayer.domain.SongsRepositoryImpl
-import com.example.scoutmediaplayer.ui.SongRecyclerViewAdapter.OnItemClickListener
-import com.example.scoutmediaplayer.ui.placeholder.PlaceholderContent
+import com.example.scoutmediaplayer.view.SongRecyclerViewAdapter.OnItemClickListener
+import com.example.scoutmediaplayer.viewmodel.PlaylistFragmentViewModel
 
 /**
  * A fragment representing a list of Items.
@@ -67,8 +63,9 @@ class PlaylistFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = FragmentPlaylistListBinding.inflate(layoutInflater, container, false)
+        viewBinding.viewModel = PlaylistFragmentViewModel(songRepository)
         val view = viewBinding.root
-        viewBinding.playlistAdd.setOnClickListener { addSongs() }
+//        viewBinding.playlistAdd.setOnClickListener { addSongs() }
         // Set the adapter
         var onItemClickListener = object : OnItemClickListener {
             override fun onItemClick(id: Int, song: Song) {
@@ -92,12 +89,9 @@ class PlaylistFragment : Fragment() {
         return view
     }
 
-    private fun addSongs() {
-        val newSongs = songRepository.getSongs()
-        songsList.clear()
-        songsList.addAll(newSongs)
-        adapter.notifyDataSetChanged()
-    }
+//    private fun addSongs() {
+//
+//    }
 
 
 }

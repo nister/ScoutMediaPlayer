@@ -1,4 +1,4 @@
-package com.example.scoutmediaplayer.ui
+package com.example.scoutmediaplayer.view
 
 
 import android.content.Intent
