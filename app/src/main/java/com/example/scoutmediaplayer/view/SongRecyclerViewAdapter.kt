@@ -1,4 +1,4 @@
-package com.example.scoutmediaplayer.ui
+package com.example.scoutmediaplayer.view
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.scoutmediaplayer.data.Song
 import com.example.scoutmediaplayer.databinding.FragmentPlaylistItemBinding
-import com.example.scoutmediaplayer.ui.placeholder.PlaceholderContent.PlaceholderItem
+import com.example.scoutmediaplayer.view.placeholder.PlaceholderContent.PlaceholderItem
 
 /**
  * [RecyclerView.Adapter] that can display a [PlaceholderItem].

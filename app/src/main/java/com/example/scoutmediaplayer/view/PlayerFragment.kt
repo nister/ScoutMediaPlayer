@@ -1,4 +1,4 @@
-package com.example.scoutmediaplayer.ui
+package com.example.scoutmediaplayer.view
 
 import android.content.ComponentName
 import android.content.Context
@@ -11,12 +11,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.session.MediaController
-import androidx.media3.session.SessionToken
 import com.example.scoutmediaplayer.PlaybackService
 import com.example.scoutmediaplayer.databinding.FragmentPlayerBinding
+import com.example.scoutmediaplayer.domain.PlayerRepository
+import com.example.scoutmediaplayer.domain.PlayerRepositoryImpl
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,6 +29,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class PlayerFragment : Fragment() {
 
+    private lateinit var playerRepository: PlayerRepository
     private lateinit var contract: PlayerFragmentContract
     private var binder: PlaybackService.PlaybackServiceBinder? = null
     private lateinit var player: ExoPlayer
@@ -93,6 +93,7 @@ class PlayerFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         bindToService()
+        playerRepository = PlayerRepositoryImpl()
     }
 
     override fun onCreateView(

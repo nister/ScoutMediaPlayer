@@ -2,7 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
+        <import type="android.view.View" />
+        <variable
+            name="viewModel"
+            type="com.example.scoutmediaplayer.viewmodel.PlayerFragmentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

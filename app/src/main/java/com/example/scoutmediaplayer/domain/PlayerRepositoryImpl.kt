@@ -2,24 +2,25 @@ package com.example.scoutmediaplayer.domain
 
 import androidx.media3.exoplayer.ExoPlayer
 
-class PlayerRepositoryImpl(private val player: ExoPlayer) : PlayerRepository {
+class PlayerRepositoryImpl() : PlayerRepository {
+
     override fun getPlayer(): ExoPlayer {
-        return player
+        return null as ExoPlayer
     }
 
     override fun play() {
-        player.play()
+//        player.play()
     }
 
     override fun pause() {
-        player.pause()
+//        player.pause()
     }
 
     override fun playPrevSong() {
-        player.seekToPreviousMediaItem()
+//        player.seekToPreviousMediaItem()
     }
 
     override fun playNextSong() {
-        player.seekToNextMediaItem()
+//        player.seekToNextMediaItem()
     }
 }
