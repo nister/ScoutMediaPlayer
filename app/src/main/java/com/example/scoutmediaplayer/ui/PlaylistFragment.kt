@@ -1,6 +1,8 @@
 package com.example.scoutmediaplayer.ui
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,7 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.media3.exoplayer.ExoPlayer
 import com.example.scoutmediaplayer.R
+import com.example.scoutmediaplayer.data.Song
+import com.example.scoutmediaplayer.databinding.FragmentPlaylistListBinding
+import com.example.scoutmediaplayer.domain.SongsRepositoryImpl
+import com.example.scoutmediaplayer.ui.SongRecyclerViewAdapter.OnItemClickListener
 import com.example.scoutmediaplayer.ui.placeholder.PlaceholderContent
 
 /**
@@ -16,39 +23,21 @@ import com.example.scoutmediaplayer.ui.placeholder.PlaceholderContent
  */
 class PlaylistFragment : Fragment() {
 
+    private lateinit var playlistFragmentListener: PlaylistFragmentListener
+    private val songsList: ArrayList<Song> = ArrayList()
+    private lateinit var adapter: SongRecyclerViewAdapter
+    private lateinit var songRepository: SongsRepositoryImpl
+    private lateinit var viewBinding: FragmentPlaylistListBinding
     private var columnCount = 1
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
+    interface PlaylistFragmentListener {
+        fun onSongSelected(id: Int, song: Song)
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_playlist_list, container, false)
-
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = SongRecyclerViewAdapter(PlaceholderContent.ITEMS)
-            }
-        }
-        return view
-    }
-
     companion object {
 
         // TODO: Customize parameter argument names
         const val ARG_COLUMN_COUNT = "column-count"
+        const val LOG_TAG = "PlaylistFragment"
 
         // TODO: Customize parameter initialization
         @JvmStatic
@@ -59,4 +48,56 @@ class PlaylistFragment : Fragment() {
                 }
             }
     }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        arguments?.let {
+            columnCount = it.getInt(ARG_COLUMN_COUNT)
+        }
+        songRepository = SongsRepositoryImpl()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        playlistFragmentListener = context as PlaylistFragmentListener
+    }
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        viewBinding = FragmentPlaylistListBinding.inflate(layoutInflater, container, false)
+        val view = viewBinding.root
+        viewBinding.playlistAdd.setOnClickListener { addSongs() }
+        // Set the adapter
+        var onItemClickListener = object : OnItemClickListener {
+            override fun onItemClick(id: Int, song: Song) {
+                Log.e(LOG_TAG, "onItemClick: $id")
+                playlistFragmentListener.onSongSelected(id, song)
+            }
+
+        }
+        adapter = SongRecyclerViewAdapter(songsList, onItemClickListener)
+        viewBinding.playlistRecyclerview.adapter = adapter
+        viewBinding.playlistRecyclerview.layoutManager = LinearLayoutManager(requireActivity())
+//        if (view is RecyclerView) {
+//            with(view) {
+//                layoutManager = when {
+//                    columnCount <= 1 -> LinearLayoutManager(context)
+//                    else -> GridLayoutManager(context, columnCount)
+//                }
+//                adapter = this@PlaylistFragment.adapter
+//            }
+//        }
+        return view
+    }
+
+    private fun addSongs() {
+        val newSongs = songRepository.getSongs()
+        songsList.clear()
+        songsList.addAll(newSongs)
+        adapter.notifyDataSetChanged()
+    }
+
+
 }

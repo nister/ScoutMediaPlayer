@@ -1,50 +1,63 @@
 package com.example.scoutmediaplayer.ui
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.example.scoutmediaplayer.R
-
+import androidx.recyclerview.widget.RecyclerView
+import com.example.scoutmediaplayer.data.Song
+import com.example.scoutmediaplayer.databinding.FragmentPlaylistItemBinding
 import com.example.scoutmediaplayer.ui.placeholder.PlaceholderContent.PlaceholderItem
-import com.example.scoutmediaplayer.databinding.FragmentPlaylistBinding
 
 /**
  * [RecyclerView.Adapter] that can display a [PlaceholderItem].
  * TODO: Replace the implementation with code for your data type.
  */
 class SongRecyclerViewAdapter(
-    private val values: List<PlaceholderItem>
-) : RecyclerView.Adapter<SongRecyclerViewAdapter.ViewHolder>() {
+    private val values: List<Song>,
+    private val onItemClickListener: OnItemClickListener
+) : RecyclerView.Adapter<SongRecyclerViewAdapter.SongViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    interface OnItemClickListener {
+        fun onItemClick(id: Int, song: Song)
+    }
 
-        return ViewHolder(
-            FragmentPlaylistBinding.inflate(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongViewHolder {
+
+        return SongViewHolder(
+            FragmentPlaylistItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
-        )
-
+            ),
+            onItemClickListener)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
         val item = values[position]
-        holder.idView.text = item.id
-        holder.contentView.text = item.content
+        holder.title.text = item.songTitle
+        holder.duration.text = item.songDuration
+        holder.root.setOnClickListener { onItemClickListener.onItemClick(position, item) }
     }
 
     override fun getItemCount(): Int = values.size
 
-    inner class ViewHolder(binding: FragmentPlaylistBinding) :
+    inner class SongViewHolder(
+        binding: FragmentPlaylistItemBinding,
+        onItemClickListener: OnItemClickListener
+    ) :
         RecyclerView.ViewHolder(binding.root) {
-        val idView: TextView = binding.itemNumber
-        val contentView: TextView = binding.content
+
+        val root: View = binding.root
+        val title: TextView = binding.songTitle
+        val duration: TextView = binding.songDuration
+        val artist: TextView = binding.songArtist
+
+
+
 
         override fun toString(): String {
-            return super.toString() + " '" + contentView.text + "'"
+            return super.toString() + " '" + title.text + "'" + " - " + artist + " - " + duration
         }
     }
 

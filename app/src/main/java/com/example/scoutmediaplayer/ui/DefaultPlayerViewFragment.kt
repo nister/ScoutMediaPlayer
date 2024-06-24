@@ -1,11 +1,28 @@
 package com.example.scoutmediaplayer.ui
 
+import android.content.ComponentName
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.databinding.DataBindingUtil
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.session.MediaController
+import androidx.media3.session.SessionToken
+import androidx.media3.ui.PlayerView
+import com.example.scoutmediaplayer.PlaybackService
 import com.example.scoutmediaplayer.R
+import com.google.common.util.concurrent.ListenableFuture
+import com.google.common.util.concurrent.MoreExecutors
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -18,6 +35,11 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class DefaultPlayerViewFragment : Fragment() {
+
+    private lateinit var playerView: PlayerView
+    private lateinit var controllerFuture: ListenableFuture<MediaController>
+    private lateinit var sessionToken: SessionToken
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -28,6 +50,30 @@ class DefaultPlayerViewFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        sessionToken = SessionToken(requireActivity(), ComponentName(requireActivity(), PlaybackService::class.java))
+        controllerFuture = MediaController.Builder(requireActivity(), sessionToken).buildAsync()
+
+        controllerFuture.addListener(
+            {
+                playerView.setPlayer(controllerFuture.get())
+                var player = playerView.player as MediaController
+                player.playWhenReady = true
+                player.setMediaItem(MediaItem.fromUri("https://github.com/rafaelreis-hotmart/Audio-Sample-files/raw/master/sample.mp3"))
+                player.prepare()
+            },
+            MoreExecutors.directExecutor()
+        )
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        playerView = view.findViewById(R.id.player_view)
+//        playerView.setShowFastForwardButton(false);
+//        playerView.setShowPreviousButton(false);
     }
 
     override fun onCreateView(

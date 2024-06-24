@@ -1,54 +1,81 @@
 package com.example.scoutmediaplayer.ui
 
 
-import android.content.ComponentName
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.databinding.DataBindingUtil
-import androidx.media3.common.Player
-import androidx.media3.session.MediaController
-import androidx.media3.session.MediaSession
-import androidx.media3.session.SessionToken
-import androidx.media3.ui.PlayerView
+import androidx.fragment.app.Fragment
 import com.example.scoutmediaplayer.PlaybackService
 import com.example.scoutmediaplayer.R
-import com.example.scoutmediaplayer.databinding.ActivityMainBinding
-import com.google.common.util.concurrent.ListenableFuture
-import com.google.common.util.concurrent.MoreExecutors
+import com.example.scoutmediaplayer.data.Song
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var playerView: PlayerView
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var controllerFuture: ListenableFuture<MediaController>
-    private lateinit var sessionToken: SessionToken
-    private lateinit var player: Player
-    private lateinit var mediaSession : MediaSession
+class MainActivity : AppCompatActivity(), PlayerFragment.PlayerFragmentContract,
+    PlaylistFragment.PlaylistFragmentListener {
 
+    companion object {
+        private const val LOG_TAG = "MainActivity"
+    }
+
+    enum class FragmentType {
+        PLAYER,
+        PLAYLIST,
+        DEFAULT_PLAYER
+    }
+
+    // TODO: Try Compose UI
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-//        setContentView(R.layout.activity_main)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-        playerView = binding.playerView
+        setContentView(R.layout.activity_main)
     }
 
     override fun onStart() {
         super.onStart()
-        sessionToken = SessionToken(this, ComponentName(this, PlaybackService::class.java))
-        controllerFuture = MediaController.Builder(this, sessionToken).buildAsync()
-        controllerFuture.addListener(
-            {
-                playerView.setPlayer(controllerFuture.get())
-            },
-            MoreExecutors.directExecutor()
-        )
+//        switchFragment(FragmentType.PLAYER)
+//        switchFragment(FragmentType.DEFAULT_PLAYER)
+        switchFragment(FragmentType.PLAYLIST)
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    private fun switchFragment(type: FragmentType) {
+        var fragment: Fragment? = supportFragmentManager.findFragmentByTag(type.toString())
+        if (fragment == null) {
+            fragment = createFragment(type)
+        }
+        supportFragmentManager
+            .beginTransaction()
+            .addToBackStack(type.toString())
+            .replace(R.id.main_fragment_container, fragment, type.toString())
+            .commit()
+    }
+
+    private fun createFragment(type: FragmentType): Fragment {
+        return when (type) {
+            FragmentType.PLAYER -> PlayerFragment()
+
+            FragmentType.PLAYLIST -> PlaylistFragment()
+
+            FragmentType.DEFAULT_PLAYER -> DefaultPlayerViewFragment()
+        }
+    }
+
+    override fun openPlaylist() {
+        switchFragment(FragmentType.PLAYLIST)
+    }
+
+    override fun openDefaultPlayer() {
+        switchFragment(FragmentType.DEFAULT_PLAYER)
+    }
+
+    override fun onSongSelected(id: Int, song: Song) {
+        val serviceIntent = Intent(this, PlaybackService::class.java)
+        serviceIntent.putExtra("COMMAND", "PLAY");
+        serviceIntent.putExtra("ID", id);
+        serviceIntent.putExtra("URI", song.songUri);
+        startService(PlaybackService.createPlaybackIntent(this, PlaybackService.IntentType.PLAY, id, song));
     }
 }

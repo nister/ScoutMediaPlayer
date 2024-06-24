@@ -56,6 +56,7 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer:1.3.1")
     implementation("androidx.media3:media3-ui:1.3.1")
     implementation("androidx.media3:media3-session:1.3.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC")
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.recyclerview)
     testImplementation(libs.junit)

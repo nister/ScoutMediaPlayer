@@ -1,11 +1,22 @@
 package com.example.scoutmediaplayer.ui
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.os.IBinder
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.scoutmediaplayer.R
+import androidx.fragment.app.Fragment
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.session.MediaController
+import androidx.media3.session.SessionToken
+import com.example.scoutmediaplayer.PlaybackService
+import com.example.scoutmediaplayer.databinding.FragmentPlayerBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -18,27 +29,93 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class PlayerFragment : Fragment() {
+
+    private lateinit var contract: PlayerFragmentContract
+    private var binder: PlaybackService.PlaybackServiceBinder? = null
+    private lateinit var player: ExoPlayer
+    private lateinit var viewBinding: FragmentPlayerBinding
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            binder = service as PlaybackService.PlaybackServiceBinder
+            Log.d(LOG_TAG, "PlayerFragment: bind to the service")
+            player = binder!!.getPlayer();
+//            var sessionToken = SessionToken(
+//                requireActivity(),
+//                ComponentName(requireActivity(), PlaybackService::class.java)
+//            )
+//            var controllerFuture =
+//                MediaController.Builder(requireActivity(), sessionToken).buildAsync()
+//            controllerFuture.addListener(
+//                {
+//                    playerView.setPlayer(controllerFuture.get())
+//                },
+//                MoreExecutors.directExecutor()
+//            )
+//            player.playWhenReady = true
+//            player.setMediaItem(MediaItem.fromUri("https://github.com/rafaelreis-hotmart/Audio-Sample-files/raw/master/sample.mp3"))
+//            player.prepare()
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            TODO("Not yet implemented")
+            //TODO start, stop, destroy
+        }
+    }
+
+    interface PlayerFragmentContract {
+        fun openPlaylist()
+        fun openDefaultPlayer()
+    }
+
+    private fun bindToService() {
+        if (binder == null) {
+            requireActivity().bindService(
+                Intent(context, PlaybackService::class.java),
+                connection,
+                Context.BIND_AUTO_CREATE
+            )
+//            PlaybackService.newIntent(this).also { intent ->
+//                bindService(intent, connection, Context.BIND_AUTO_CREATE)
+//            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(LOG_TAG, "PlayerFragment: onCreate")
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        bindToService()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_player, container, false)
+    ): View {
+
+        viewBinding = FragmentPlayerBinding.inflate(layoutInflater, container, false)
+        viewBinding.playerPlaylist.setOnClickListener { contract.openPlaylist() }
+        viewBinding.playerDefault.setOnClickListener { contract.openDefaultPlayer() }
+        return viewBinding.root;
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        //TODO rewrite to repo?
+        contract = context as PlayerFragmentContract
     }
 
     companion object {
+
+        private const val LOG_TAG = "PlayerFragment"
+
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.

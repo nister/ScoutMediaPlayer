@@ -1,51 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.PlayerFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/song_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Dummy song name"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="@id/song_author"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data></data>
 
-    <TextView
-        android:id="@+id/song_author"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="Dummy song author"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/song_cover"
-        app:layout_constraintTop_toBottomOf="@id/song_name" />
-
-    <ImageView
-        android:id="@+id/song_cover"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:src="@android:color/holo_blue_dark"
-        app:layout_constraintBottom_toTopOf="@id/song_controls" />
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/song_controls"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_marginBottom="32dp"
-        android:background="@android:color/holo_green_dark"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/song_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Dummy song name"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="@id/song_author"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/song_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dummy song author"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/song_cover"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/song_name" />
+
+        <ImageView
+            android:id="@+id/song_cover"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:src="@android:color/holo_blue_dark"
+            app:layout_constraintBottom_toTopOf="@id/song_controls" />
+
+        <LinearLayout
+            android:id="@+id/song_controls"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@android:color/holo_green_dark"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_media_rew" />
+
+            <ImageView
+                android:id="@+id/player_default"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="16dp"
+                android:src="@android:drawable/ic_media_play"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/player_playlist"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="16dp"
+                android:src="@android:drawable/ic_menu_agenda"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
