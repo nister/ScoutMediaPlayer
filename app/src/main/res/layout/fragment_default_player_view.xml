@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <import type="android.view.View" />
@@ -13,9 +15,44 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            tools:text="Stab author"
+            android:id="@+id/player_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:text="@{viewModel.author}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:text="@{viewModel.trackName}"
+            android:layout_width="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/player_author"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:src="@{viewModel.cover}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:src="@android:drawable/ic_menu_add"
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
+
         <androidx.media3.ui.PlayerView
             android:id="@+id/player_view"
             android:layout_width="match_parent"
             android:layout_height="400dp" />
+
+        <ImageView
+            android:onClick="@{()->viewModel.openPlaylist()}"
+            android:layout_width="75dp"
+            android:layout_height="75dp"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -3,17 +3,14 @@ package com.example.scoutmediaplayer.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.scoutmediaplayer.PlaybackService
 import com.example.scoutmediaplayer.R
 import com.example.scoutmediaplayer.data.Song
-import com.example.scoutmediaplayer.view.PlaylistFragment.Companion
 
 class MainActivity : AppCompatActivity(), PlayerFragment.PlayerFragmentContract,
-    PlaylistFragment.PlaylistFragmentListener {
+    PlaylistFragment.OnSongSelectedListener {
 
     companion object {
         private const val LOG_TAG = "MainActivity"
@@ -34,8 +31,8 @@ class MainActivity : AppCompatActivity(), PlayerFragment.PlayerFragmentContract,
     override fun onStart() {
         super.onStart()
 //        switchFragment(FragmentType.PLAYER)
-//        switchFragment(FragmentType.DEFAULT_PLAYER)
-        switchFragment(FragmentType.PLAYLIST)
+        switchFragment(FragmentType.DEFAULT_PLAYER)
+//        switchFragment(FragmentType.PLAYLIST)
     }
 
     override fun onResume() {

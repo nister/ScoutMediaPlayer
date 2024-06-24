@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.scoutmediaplayer.viewmodel.PlaylistFragmentListItemViewModel" />
+            type="com.example.scoutmediaplayer.viewmodel.SongListItemViewModel" />
     </data>
 
     <LinearLayout

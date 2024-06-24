@@ -1,13 +1,10 @@
 package com.example.scoutmediaplayer.domain
 
-import androidx.media3.exoplayer.ExoPlayer
+import android.content.Context
 
-class PlayerRepositoryImpl() : PlayerRepository {
+class PlayerRepositoryImpl(context: Context?) : PlayerRepository {
 
-    override fun getPlayer(): ExoPlayer {
-        return null as ExoPlayer
-    }
-
+    //TODO context dependency is baaad
     override fun play() {
 //        player.play()
     }

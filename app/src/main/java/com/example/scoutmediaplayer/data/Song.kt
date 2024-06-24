@@ -2,16 +2,19 @@ package com.example.scoutmediaplayer.data
 
 import android.os.Parcel
 import android.os.Parcelable
-import kotlin.time.Duration
 
-data class Song(val songArtist: String, val songTitle: String, val songDuration: String, val songUri: String): Parcelable {
+data class Song(
+    val songArtist: String,
+    val songTitle: String,
+    val songDuration: String,
+    val songUri: String
+) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!
-    ) {
-    }
+    )
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
