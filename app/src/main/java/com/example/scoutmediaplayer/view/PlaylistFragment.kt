@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.scoutmediaplayer.data.Song
 import com.example.scoutmediaplayer.databinding.FragmentPlaylistListBinding
-import com.example.scoutmediaplayer.domain.PlayerRepositoryImpl
 import com.example.scoutmediaplayer.domain.SongsRepositoryImpl
 import com.example.scoutmediaplayer.viewmodel.PlaylistFragmentViewModel
 
@@ -44,7 +43,6 @@ class PlaylistFragment : Fragment(), PlaylistFragmentViewModel.Contract {
         viewBinding = FragmentPlaylistListBinding.inflate(layoutInflater, container, false)
         val vm = ViewModelProvider(this)[PlaylistFragmentViewModel::class.java]
         vm.songRepository = SongsRepositoryImpl()
-        vm.playerRepository = PlayerRepositoryImpl(requireActivity())
         vm.contract = this
         viewBinding.viewModel = vm
         val view = viewBinding.root

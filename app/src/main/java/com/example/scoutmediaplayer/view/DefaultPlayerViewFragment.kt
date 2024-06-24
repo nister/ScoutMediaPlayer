@@ -7,17 +7,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.OptIn
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.media3.common.Player
 import androidx.media3.common.Tracks
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import androidx.media3.ui.PlayerView
 import com.example.scoutmediaplayer.PlaybackService
 import com.example.scoutmediaplayer.R
 import com.example.scoutmediaplayer.databinding.FragmentDefaultPlayerViewBinding
-import com.example.scoutmediaplayer.domain.PlayerRepositoryImpl
 import com.example.scoutmediaplayer.viewmodel.PlayerFragmentViewModel
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
@@ -87,7 +88,7 @@ class DefaultPlayerViewFragment : Fragment() {
         vm.title.value = title
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    @OptIn(UnstableApi::class) override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         playerView = view.findViewById(R.id.player_view)
         // Disabled due to the requirements
@@ -102,7 +103,6 @@ class DefaultPlayerViewFragment : Fragment() {
         viewBinding = FragmentDefaultPlayerViewBinding.inflate(layoutInflater, container, false)
         viewBinding.setLifecycleOwner(this);
         vm = ViewModelProvider(this)[PlayerFragmentViewModel::class.java]
-        vm.playerRepository = PlayerRepositoryImpl(requireActivity())
         viewBinding.viewModel = vm
         return viewBinding.root
     }

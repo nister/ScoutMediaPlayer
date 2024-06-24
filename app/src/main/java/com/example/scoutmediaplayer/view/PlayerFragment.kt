@@ -14,13 +14,10 @@ import androidx.fragment.app.Fragment
 import androidx.media3.exoplayer.ExoPlayer
 import com.example.scoutmediaplayer.PlaybackService
 import com.example.scoutmediaplayer.databinding.FragmentPlayerBinding
-import com.example.scoutmediaplayer.domain.PlayerRepository
 
 
-//**
 class PlayerFragment : Fragment() {
 
-    private lateinit var playerRepository: PlayerRepository
     private var binder: PlaybackService.PlaybackServiceBinder? = null
     private lateinit var player: ExoPlayer
     private lateinit var viewBinding: FragmentPlayerBinding
