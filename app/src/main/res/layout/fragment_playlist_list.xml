@@ -14,7 +14,6 @@
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/cardview_light_background"
         tools:context=".view.PlaylistFragment">
 
         <TextView
@@ -22,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="Library"
+            android:text="@string/library_fragment_header"
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +47,6 @@
             android:id="@+id/playlist_controls"
             android:layout_width="match_parent"
             android:layout_height="75dp"
-            android:background="@android:color/holo_green_dark"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent">
 
@@ -65,6 +63,13 @@
                 android:layout_height="75dp"
                 android:onClick="@{()->viewModel.clearPlaylist()}"
                 android:src="@android:drawable/ic_notification_clear_all" />
+
+            <ImageView
+                android:id="@+id/playlist_toggle"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:onClick="@{()->viewModel.togglePlaylist()}"
+                android:src="@android:drawable/ic_menu_zoom" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

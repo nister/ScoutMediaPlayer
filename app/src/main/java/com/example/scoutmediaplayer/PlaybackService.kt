@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
-import android.text.TextUtils
 import android.util.Log
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
@@ -18,22 +17,21 @@ class PlaybackService : MediaSessionService() {
         private const val LOG_TAG = "PlaybackService"
         private const val INTENT_TYPE = "INTENT_TYPE"
         private const val INTENT_SONG_ID = "INTENT_SONG_ID"
-        private const val INTENT_SONG = "INTENT_SONG"
+        private const val INTENT_SONG_LIST = "INTENT_SONG_LIST"
 
         @JvmStatic
         fun createPlaybackIntent(
             context: Context,
             type: IntentType,
             id: Int = -1,
-            song: Song?
+            songList: ArrayList<Song>?
         ): Intent {
             var intent = Intent(context, PlaybackService::class.java)
             intent.putExtra(INTENT_TYPE, type.toString())
             when (type) {
-                //TODO handle resume if on pause?
                 IntentType.PLAY -> {
                     intent.putExtra(INTENT_SONG_ID, id)
-                    intent.putExtra(INTENT_SONG, song)
+                    intent.putParcelableArrayListExtra(INTENT_SONG_LIST, songList)
                 }
 
                 IntentType.PAUSE -> TODO()
@@ -69,24 +67,22 @@ class PlaybackService : MediaSessionService() {
             IntentType.PREV -> TODO()
             IntentType.NEXT -> TODO()
         }
-
-//        player.seekTo(1, 0);
     }
 
     private fun handlePlayIntent(intent: Intent) {
-        var song = intent.getParcelableExtra<Song>(INTENT_SONG)
         var songId = intent.getIntExtra(INTENT_SONG_ID, -1)
-        if (song != null && !TextUtils.isEmpty(song.songUri) && songId != -1) {
-            player.setMediaItem(MediaItem.fromUri(song.songUri))
+
+        val songsList: java.util.ArrayList<Song>? =
+            intent.getParcelableArrayListExtra(INTENT_SONG_LIST)
+        if (songsList != null) {
+            Log.d(LOG_TAG, "handlePlayIntent: $player")
+            player.clearMediaItems()
+            player.addMediaItems(songsList.map { MediaItem.fromUri(it.songUri) })
+        }
+        if (songId != -1) {
+            player.seekTo(songId, 0)
             player.prepare()
         }
-
-//        if (songId != -1) {
-//            player.seekTo(songId, 0);
-//        } else if (song != null) {
-//            player.setMediaItem(MediaItem.fromUri(song.songUri))
-//            player.prepare()
-//        }
     }
 
     override fun onCreate() {

@@ -9,13 +9,19 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.scoutmediaplayer.data.Song
 import com.example.scoutmediaplayer.databinding.FragmentPlaylistListBinding
+import com.example.scoutmediaplayer.domain.PlayerRepositoryImpl
 import com.example.scoutmediaplayer.domain.SongsRepositoryImpl
 import com.example.scoutmediaplayer.viewmodel.PlaylistFragmentViewModel
 
-class PlaylistFragment : Fragment() {
+class PlaylistFragment : Fragment(), PlaylistFragmentViewModel.Contract {
 
+    private lateinit var contract: Contract
     private lateinit var onSongSelectedListener: OnSongSelectedListener
     private lateinit var viewBinding: FragmentPlaylistListBinding
+
+    interface Contract {
+        fun togglePlaylist()
+    }
 
     interface OnSongSelectedListener {
         fun onSongSelected(id: Int, song: Song)
@@ -28,6 +34,7 @@ class PlaylistFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         onSongSelectedListener = context as OnSongSelectedListener
+        contract = context as Contract
     }
 
     override fun onCreateView(
@@ -37,10 +44,19 @@ class PlaylistFragment : Fragment() {
         viewBinding = FragmentPlaylistListBinding.inflate(layoutInflater, container, false)
         val vm = ViewModelProvider(this)[PlaylistFragmentViewModel::class.java]
         vm.songRepository = SongsRepositoryImpl()
-        vm.onSongSelectedListener = onSongSelectedListener
+        vm.playerRepository = PlayerRepositoryImpl(requireActivity())
+        vm.contract = this
         viewBinding.viewModel = vm
         val view = viewBinding.root
         return view
+    }
+
+    override fun togglePlaylist() {
+        contract.togglePlaylist()
+    }
+
+    override fun onSongSelected(id: Int, song: Song) {
+        onSongSelectedListener.onSongSelected(id, song)
     }
 
 }

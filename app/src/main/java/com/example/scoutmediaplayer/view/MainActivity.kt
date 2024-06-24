@@ -1,7 +1,5 @@
 package com.example.scoutmediaplayer.view
 
-
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -9,8 +7,8 @@ import com.example.scoutmediaplayer.PlaybackService
 import com.example.scoutmediaplayer.R
 import com.example.scoutmediaplayer.data.Song
 
-class MainActivity : AppCompatActivity(), PlayerFragment.PlayerFragmentContract,
-    PlaylistFragment.OnSongSelectedListener {
+class MainActivity : AppCompatActivity(), PlaylistFragment.OnSongSelectedListener,
+    PlaylistFragment.Contract {
 
     companion object {
         private const val LOG_TAG = "MainActivity"
@@ -30,50 +28,53 @@ class MainActivity : AppCompatActivity(), PlayerFragment.PlayerFragmentContract,
 
     override fun onStart() {
         super.onStart()
-//        switchFragment(FragmentType.PLAYER)
-        switchFragment(FragmentType.DEFAULT_PLAYER)
-//        switchFragment(FragmentType.PLAYLIST)
+        addFragment(FragmentType.DEFAULT_PLAYER, R.id.main_fragment_container)
+        addFragment(FragmentType.PLAYLIST, R.id.playlist_fragment_container)
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    private fun switchFragment(type: FragmentType) {
-        var fragment: Fragment? = supportFragmentManager.findFragmentByTag(type.toString())
-        if (fragment == null) {
-            fragment = createFragment(type)
-        }
+    private fun addFragment(type: FragmentType, layoutId: Int) {
         supportFragmentManager
             .beginTransaction()
-            .addToBackStack(type.toString())
-            .replace(R.id.main_fragment_container, fragment, type.toString())
+            .add(layoutId, createFragment(type), type.toString())
             .commit()
     }
 
     private fun createFragment(type: FragmentType): Fragment {
         return when (type) {
             FragmentType.PLAYER -> PlayerFragment()
-
             FragmentType.PLAYLIST -> PlaylistFragment()
-
             FragmentType.DEFAULT_PLAYER -> DefaultPlayerViewFragment()
         }
     }
 
-    override fun openPlaylist() {
-        switchFragment(FragmentType.PLAYLIST)
-    }
-
-    override fun openDefaultPlayer() {
-        switchFragment(FragmentType.DEFAULT_PLAYER)
-    }
-
     override fun onSongSelected(id: Int, song: Song) {
-        val serviceIntent = Intent(this, PlaybackService::class.java)
-        serviceIntent.putExtra("COMMAND", "PLAY");
-        serviceIntent.putExtra("ID", id);
-        serviceIntent.putExtra("URI", song.songUri);
-        startService(PlaybackService.createPlaybackIntent(this, PlaybackService.IntentType.PLAY, id, song));
+        var list = ArrayList<Song>()
+        list.add(song)
+        startService(
+            PlaybackService.createPlaybackIntent(
+                this,
+                PlaybackService.IntentType.PLAY,
+                id,
+                list
+            )
+        )
+    }
+
+    override fun togglePlaylist() {
+        var playlistFragment =
+            supportFragmentManager.findFragmentByTag(FragmentType.DEFAULT_PLAYER.toString())
+        if (playlistFragment != null) {
+            if (playlistFragment.isVisible) {
+                supportFragmentManager.beginTransaction()
+                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                    .hide(playlistFragment)
+                    .commit();
+            } else {
+                supportFragmentManager.beginTransaction()
+                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                    .show(playlistFragment)
+                    .commit();
+            }
+        }
     }
 }

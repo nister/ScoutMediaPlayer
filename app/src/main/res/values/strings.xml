@@ -5,4 +5,5 @@
     <string name="player_fragment_tag">player_fragment_tag</string>
     <string name="playlist_fragment_tag">playlist_fragment_tag</string>
     <string name="default_player_fragment_tag">default_player_fragment_tag</string>
+    <string name="library_fragment_header">Library</string>
 </resources>
