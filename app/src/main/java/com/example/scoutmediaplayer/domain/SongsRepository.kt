@@ -2,7 +2,8 @@ package com.example.scoutmediaplayer.domain
 
 import com.example.scoutmediaplayer.data.Song
 
+//TODO do async call
 interface SongsRepository {
-    fun getSongs() : ArrayList<Song>
-    fun getAssetSongs() : ArrayList<Song>
+    suspend fun getSongs() : ArrayList<Song>
+    suspend fun getAssetSongs() : ArrayList<Song>
 }
