@@ -2,4 +2,7 @@
     <string name="app_name">ScoutMediaPlayer</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="player_fragment_tag">player_fragment_tag</string>
+    <string name="playlist_fragment_tag">playlist_fragment_tag</string>
+    <string name="default_player_fragment_tag">default_player_fragment_tag</string>
 </resources>
