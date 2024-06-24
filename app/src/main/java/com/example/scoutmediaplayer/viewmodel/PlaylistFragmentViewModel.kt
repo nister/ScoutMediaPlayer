@@ -28,8 +28,7 @@ class PlaylistFragmentViewModel : ViewModel() {
             }
         }
         viewModelScope.launch {
-            val newSongs = songRepository.getSongs()
-//            playerRepository.play(0, newSongs)
+            val newSongs = songRepository.getAssetSongs()
             songsViewModels.clear()
             songsViewModels.addAll(newSongs.map {
                 SongListItemViewModel(

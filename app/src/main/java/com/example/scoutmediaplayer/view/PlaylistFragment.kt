@@ -42,7 +42,7 @@ class PlaylistFragment : Fragment(), PlaylistFragmentViewModel.Contract {
     ): View {
         viewBinding = FragmentPlaylistListBinding.inflate(layoutInflater, container, false)
         val vm = ViewModelProvider(this)[PlaylistFragmentViewModel::class.java]
-        vm.songRepository = SongsRepositoryImpl()
+        vm.songRepository = SongsRepositoryImpl(requireActivity().applicationContext)
         vm.contract = this
         viewBinding.viewModel = vm
         val view = viewBinding.root

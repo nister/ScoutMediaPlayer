@@ -75,9 +75,11 @@ class PlaybackService : MediaSessionService() {
         val songsList: java.util.ArrayList<Song>? =
             intent.getParcelableArrayListExtra(INTENT_SONG_LIST)
         if (songsList != null) {
-            Log.d(LOG_TAG, "handlePlayIntent: $player")
+
             player.clearMediaItems()
-            player.addMediaItems(songsList.map { MediaItem.fromUri(it.songUri) })
+            player.addMediaItems(songsList.map {
+                Log.d(LOG_TAG, "handlePlayIntent.addMediaItems: $it.songUri")
+                MediaItem.fromUri(it.songUri) })
         }
         if (songId != -1) {
             player.seekTo(songId, 0)
