@@ -63,20 +63,20 @@ class PlaylistFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = FragmentPlaylistListBinding.inflate(layoutInflater, container, false)
-        viewBinding.viewModel = PlaylistFragmentViewModel(songRepository)
+        viewBinding.viewModel = PlaylistFragmentViewModel(songRepository, playlistFragmentListener)
         val view = viewBinding.root
 //        viewBinding.playlistAdd.setOnClickListener { addSongs() }
         // Set the adapter
-        var onItemClickListener = object : OnItemClickListener {
-            override fun onItemClick(id: Int, song: Song) {
-                Log.e(LOG_TAG, "onItemClick: $id")
-                playlistFragmentListener.onSongSelected(id, song)
-            }
-
-        }
-        adapter = SongRecyclerViewAdapter(songsList, onItemClickListener)
-        viewBinding.playlistRecyclerview.adapter = adapter
-        viewBinding.playlistRecyclerview.layoutManager = LinearLayoutManager(requireActivity())
+//        var onItemClickListener = object : OnItemClickListener {
+//            override fun onItemClick(id: Int, song: Song) {
+//                Log.e(LOG_TAG, "onItemClick: $id")
+//                playlistFragmentListener.onSongSelected(id, song)
+//            }
+//
+//        }
+//        adapter = SongRecyclerViewAdapter(songsList, onItemClickListener)
+//        viewBinding.playlistRecyclerview.adapter = adapter
+//        viewBinding.playlistRecyclerview.layoutManager = LinearLayoutManager(requireActivity())
 //        if (view is RecyclerView) {
 //            with(view) {
 //                layoutManager = when {
