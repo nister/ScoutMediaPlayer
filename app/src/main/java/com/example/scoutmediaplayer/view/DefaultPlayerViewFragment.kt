@@ -1,14 +1,14 @@
 package com.example.scoutmediaplayer.view
 
 import android.content.ComponentName
+import android.media.MediaMetadataRetriever
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.Tracks
 import androidx.media3.session.MediaController
@@ -22,18 +22,10 @@ import com.example.scoutmediaplayer.viewmodel.PlayerFragmentViewModel
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [DefaultPlayerViewFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class DefaultPlayerViewFragment : Fragment() {
 
+    private lateinit var player: MediaController
+    private lateinit var vm: PlayerFragmentViewModel
     private lateinit var viewBinding: FragmentDefaultPlayerViewBinding
     private lateinit var playerView: PlayerView
     private lateinit var controllerFuture: ListenableFuture<MediaController>
@@ -45,43 +37,62 @@ class DefaultPlayerViewFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        sessionToken = SessionToken(requireActivity(), ComponentName(requireActivity(), PlaybackService::class.java))
-        controllerFuture = MediaController.Builder(requireActivity(), sessionToken).buildAsync()
+        setupPlayer()
+    }
 
+    private fun setupPlayer() {
+        sessionToken = SessionToken(
+            requireActivity(),
+            ComponentName(requireActivity(), PlaybackService::class.java)
+        )
+        controllerFuture = MediaController.Builder(requireActivity(), sessionToken).buildAsync()
         controllerFuture.addListener(
             {
                 playerView.setPlayer(controllerFuture.get())
-                var player = playerView.player as MediaController
-                val listener = object : Player.Listener {
-                    override fun onEvents(player: Player, events: Player.Events) {
-                        super.onEvents(player, events)
-                        Log.d(LOG_TAG, "onEvents: $events")
-                    }
-
-                    override fun onPlaybackStateChanged(playbackState: Int) {
-                        super.onPlaybackStateChanged(playbackState)
-                        Log.d(LOG_TAG, "onPlaybackStateChanged: $playbackState")
-                    }
-
-                    override fun onTracksChanged(tracks: Tracks) {
-                        super.onTracksChanged(tracks)
-                        Log.d(LOG_TAG, "onPlaybackStateChanged: $tracks")
-                    }
-                }
-                player.addListener(listener)
-                player.playWhenReady = true
-                player.setMediaItem(MediaItem.fromUri("https://github.com/rafaelreis-hotmart/Audio-Sample-files/raw/master/sample.mp3"))
-                player.prepare()
+                player = playerView.player as MediaController
+                player.addListener(createPlayerListener())
             },
             MoreExecutors.directExecutor()
         )
     }
 
+    private fun createPlayerListener(): Player.Listener {
+        return object : Player.Listener {
+            override fun onEvents(player: Player, events: Player.Events) {
+                super.onEvents(player, events)
+                Log.d(LOG_TAG, "onEvents: $events.")
+            }
+
+            override fun onPlaybackStateChanged(playbackState: Int) {
+                super.onPlaybackStateChanged(playbackState)
+                Log.d(LOG_TAG, "onPlaybackStateChanged: $playbackState")
+                updateMetadata()
+            }
+
+            override fun onTracksChanged(tracks: Tracks) {
+                super.onTracksChanged(tracks)
+                Log.d(LOG_TAG, "onPlaybackStateChanged: $tracks")
+            }
+        }
+    }
+
+    private fun updateMetadata() {
+        var metadataRetriever = MediaMetadataRetriever()
+        metadataRetriever.setDataSource(player.currentMediaItem?.localConfiguration?.uri.toString())
+        var artist = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
+        var title = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
+        Log.d(LOG_TAG, "updateMetadata artist: $artist")
+        Log.d(LOG_TAG, "updateMetadata title: $title")
+        vm.artist.value = artist
+        vm.title.value = title
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         playerView = view.findViewById(R.id.player_view)
-//        playerView.setShowFastForwardButton(false);
-//        playerView.setShowPreviousButton(false);
+        // Disabled due to the requirements
+        playerView.setShowFastForwardButton(false);
+        playerView.setShowRewindButton(false);
     }
 
     override fun onCreateView(
@@ -89,7 +100,7 @@ class DefaultPlayerViewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         viewBinding = FragmentDefaultPlayerViewBinding.inflate(layoutInflater, container, false)
-        val vm = ViewModelProvider(this)[PlayerFragmentViewModel::class.java]
+        vm = ViewModelProvider(this)[PlayerFragmentViewModel::class.java]
         vm.playerRepository = PlayerRepositoryImpl(requireActivity())
         viewBinding.viewModel = vm
         return viewBinding.root

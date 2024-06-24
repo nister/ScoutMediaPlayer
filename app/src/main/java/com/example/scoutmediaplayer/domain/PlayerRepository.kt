@@ -1,10 +1,11 @@
 package com.example.scoutmediaplayer.domain
 
-import androidx.media3.exoplayer.ExoPlayer
+import com.example.scoutmediaplayer.data.Song
 
 interface PlayerRepository {
     fun play()
     fun pause()
     fun playPrevSong()
     fun playNextSong()
+    fun play(id: Int, songs: ArrayList<Song>)
 }
