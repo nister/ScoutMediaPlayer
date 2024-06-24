@@ -25,10 +25,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Stab ong name" />
+            tools:text="Stub ong name" />
 
         <TextView
-            tools:text="Stab author"
+            tools:text="Stub author"
             android:textSize="@dimen/player_song_author_text_size"
             android:id="@+id/player_song_author"
             android:layout_width="wrap_content"

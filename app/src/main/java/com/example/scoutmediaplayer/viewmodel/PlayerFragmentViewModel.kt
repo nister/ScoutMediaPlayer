@@ -10,10 +10,10 @@ class PlayerFragmentViewModel : ViewModel() {
     lateinit var playerRepository: PlayerRepository
 
     val artist: MutableLiveData<String> by lazy {
-        MutableLiveData<String>("author")
+        MutableLiveData<String>("")
     }
 
     val title: MutableLiveData<String> by lazy {
-        MutableLiveData<String>("trackName")
+        MutableLiveData<String>("")
     }
 }

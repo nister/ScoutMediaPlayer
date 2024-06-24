@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity(), PlaylistFragment.OnSongSelectedListene
 
     override fun onStart() {
         super.onStart()
+        //TODO move to FragmentContainerView
         addFragment(FragmentType.DEFAULT_PLAYER, R.id.main_fragment_container)
         addFragment(FragmentType.PLAYLIST, R.id.playlist_fragment_container)
     }
