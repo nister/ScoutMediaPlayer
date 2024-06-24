@@ -4,12 +4,12 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.scoutmediaplayer.data.Song
 import com.example.scoutmediaplayer.view.PlaylistFragment.Companion.LOG_TAG
-import com.example.scoutmediaplayer.view.PlaylistFragment.PlaylistFragmentListener
+import com.example.scoutmediaplayer.view.PlaylistFragment.OnSongSelectedListener
 
-class PlaylistFragmentListItemViewModel(val id: Int, val song: Song, val fragmentListener: PlaylistFragmentListener) : ViewModel() {
+class SongListItemViewModel(val id: Int, val song: Song, private val listener: OnSongSelectedListener) : ViewModel() {
 
     fun itemClick() {
         Log.e(LOG_TAG, "onItemClick: $id")
-        fragmentListener.onSongSelected(id, song)
+        listener.onSongSelected(id, song)
     }
 }

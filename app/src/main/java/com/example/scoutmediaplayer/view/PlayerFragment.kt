@@ -11,11 +11,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.media3.exoplayer.ExoPlayer
 import com.example.scoutmediaplayer.PlaybackService
 import com.example.scoutmediaplayer.databinding.FragmentPlayerBinding
 import com.example.scoutmediaplayer.domain.PlayerRepository
 import com.example.scoutmediaplayer.domain.PlayerRepositoryImpl
+import com.example.scoutmediaplayer.domain.SongsRepositoryImpl
+import com.example.scoutmediaplayer.viewmodel.PlayerFragmentViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,21 +47,6 @@ class PlayerFragment : Fragment() {
             binder = service as PlaybackService.PlaybackServiceBinder
             Log.d(LOG_TAG, "PlayerFragment: bind to the service")
             player = binder!!.getPlayer();
-//            var sessionToken = SessionToken(
-//                requireActivity(),
-//                ComponentName(requireActivity(), PlaybackService::class.java)
-//            )
-//            var controllerFuture =
-//                MediaController.Builder(requireActivity(), sessionToken).buildAsync()
-//            controllerFuture.addListener(
-//                {
-//                    playerView.setPlayer(controllerFuture.get())
-//                },
-//                MoreExecutors.directExecutor()
-//            )
-//            player.playWhenReady = true
-//            player.setMediaItem(MediaItem.fromUri("https://github.com/rafaelreis-hotmart/Audio-Sample-files/raw/master/sample.mp3"))
-//            player.prepare()
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -93,7 +81,6 @@ class PlayerFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         bindToService()
-        playerRepository = PlayerRepositoryImpl()
     }
 
     override fun onCreateView(
@@ -104,6 +91,11 @@ class PlayerFragment : Fragment() {
         viewBinding = FragmentPlayerBinding.inflate(layoutInflater, container, false)
         viewBinding.playerPlaylist.setOnClickListener { contract.openPlaylist() }
         viewBinding.playerDefault.setOnClickListener { contract.openDefaultPlayer() }
+
+//        val vm = ViewModelProvider(this)[PlayerFragmentViewModel::class.java]
+//        vm.playerRepository = PlayerRepositoryImpl(requireActivity())
+//        viewBinding.viewModel = vm
+
         return viewBinding.root;
     }
 
@@ -116,23 +108,5 @@ class PlayerFragment : Fragment() {
     companion object {
 
         private const val LOG_TAG = "PlayerFragment"
-
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PlayerFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PlayerFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

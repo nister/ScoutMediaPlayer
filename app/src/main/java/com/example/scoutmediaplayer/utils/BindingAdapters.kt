@@ -54,7 +54,7 @@ object BindingAdapters {
         }
     }
 
-    class MyViewHolder constructor(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
+    class MyViewHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Any?) {
             item?.let {

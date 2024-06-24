@@ -2,17 +2,22 @@ package com.example.scoutmediaplayer.view
 
 import android.content.ComponentName
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.common.Tracks
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import androidx.media3.ui.PlayerView
 import com.example.scoutmediaplayer.PlaybackService
 import com.example.scoutmediaplayer.R
 import com.example.scoutmediaplayer.databinding.FragmentDefaultPlayerViewBinding
+import com.example.scoutmediaplayer.domain.PlayerRepositoryImpl
 import com.example.scoutmediaplayer.viewmodel.PlayerFragmentViewModel
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
@@ -34,16 +39,8 @@ class DefaultPlayerViewFragment : Fragment() {
     private lateinit var controllerFuture: ListenableFuture<MediaController>
     private lateinit var sessionToken: SessionToken
 
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    companion object {
+        const val LOG_TAG = "PlaylistFragment"
     }
 
     override fun onStart() {
@@ -55,6 +52,23 @@ class DefaultPlayerViewFragment : Fragment() {
             {
                 playerView.setPlayer(controllerFuture.get())
                 var player = playerView.player as MediaController
+                val listener = object : Player.Listener {
+                    override fun onEvents(player: Player, events: Player.Events) {
+                        super.onEvents(player, events)
+                        Log.d(LOG_TAG, "onEvents: $events")
+                    }
+
+                    override fun onPlaybackStateChanged(playbackState: Int) {
+                        super.onPlaybackStateChanged(playbackState)
+                        Log.d(LOG_TAG, "onPlaybackStateChanged: $playbackState")
+                    }
+
+                    override fun onTracksChanged(tracks: Tracks) {
+                        super.onTracksChanged(tracks)
+                        Log.d(LOG_TAG, "onPlaybackStateChanged: $tracks")
+                    }
+                }
+                player.addListener(listener)
                 player.playWhenReady = true
                 player.setMediaItem(MediaItem.fromUri("https://github.com/rafaelreis-hotmart/Audio-Sample-files/raw/master/sample.mp3"))
                 player.prepare()
@@ -73,30 +87,11 @@ class DefaultPlayerViewFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         viewBinding = FragmentDefaultPlayerViewBinding.inflate(layoutInflater, container, false)
-        viewBinding.viewModel = PlayerFragmentViewModel()
+        val vm = ViewModelProvider(this)[PlayerFragmentViewModel::class.java]
+        vm.playerRepository = PlayerRepositoryImpl(requireActivity())
+        viewBinding.viewModel = vm
         return viewBinding.root
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DefaultPlayerViewFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            DefaultPlayerViewFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }
