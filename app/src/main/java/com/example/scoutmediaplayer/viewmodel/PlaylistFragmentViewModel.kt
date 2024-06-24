@@ -1,24 +1,28 @@
 package com.example.scoutmediaplayer.viewmodel
 
+import androidx.databinding.ObservableArrayList
+import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
 import com.example.scoutmediaplayer.data.Song
 import com.example.scoutmediaplayer.domain.SongsRepository
+import com.example.scoutmediaplayer.view.PlaylistFragment.PlaylistFragmentListener
 
 class PlaylistFragmentViewModel : ViewModel {
 
-
-    constructor(repo: SongsRepository) : super() {
+    constructor(repo: SongsRepository, fragmentListener: PlaylistFragmentListener) : super() {
         songRepository = repo
+        this.fragmentListener = fragmentListener
     }
 
-    private lateinit var songRepository: SongsRepository
-    private var songsList: ArrayList<Song> = ArrayList<Song>()
+    private var songRepository: SongsRepository
+    private var fragmentListener: PlaylistFragmentListener
+
+    val songsViewModels: ObservableList<PlaylistFragmentListItemViewModel> = ObservableArrayList()
 
     fun addSongs() {
         val newSongs = songRepository.getSongs()
-        songsList.clear()
-        songsList.addAll(newSongs)
-//        adapter.notifyDataSetChanged()
+        songsViewModels.clear()
+        songsViewModels.addAll(newSongs.map { PlaylistFragmentListItemViewModel(newSongs.indexOf(it), it, fragmentListener) })
     }
 
     fun clearPlaylist() {

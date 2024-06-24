@@ -36,6 +36,8 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:background="@android:color/holo_purple"
+            app:itemLayoutResId="@{@layout/fragment_playlist_item}"
+            app:items="@{viewModel.songsViewModels}"
             app:layoutManager="LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/playlist_controls"
             app:layout_constraintTop_toBottomOf="@id/playlist_lib_title"
