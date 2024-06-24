@@ -5,14 +5,12 @@ import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scoutmediaplayer.data.Song
-import com.example.scoutmediaplayer.domain.PlayerRepositoryImpl
 import com.example.scoutmediaplayer.domain.SongsRepository
 import kotlinx.coroutines.launch
 
 //TODO DI
 class PlaylistFragmentViewModel : ViewModel() {
 
-    lateinit var playerRepository: PlayerRepositoryImpl
     lateinit var songRepository: SongsRepository
     lateinit var contract: Contract
 
@@ -31,7 +29,7 @@ class PlaylistFragmentViewModel : ViewModel() {
         }
         viewModelScope.launch {
             val newSongs = songRepository.getSongs()
-            playerRepository.play(0, newSongs)
+//            playerRepository.play(0, newSongs)
             songsViewModels.clear()
             songsViewModels.addAll(newSongs.map {
                 SongListItemViewModel(
