@@ -3,4 +3,5 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="player_song_title_text_size">20sp</dimen>
     <dimen name="player_song_author_text_size">16sp</dimen>
+    <dimen name="playlist_toolbar_icon_size">50dp</dimen>
 </resources>

@@ -35,4 +35,9 @@ class SongsRepositoryImpl : SongsRepository {
             "https://github.com/rafaelreis-hotmart/Audio-Sample-files/raw/master/sample.mp3"))
         return list
     }
+
+    override fun getAssetSongs(): ArrayList<Song> {
+        val list = ArrayList<Song>()
+        return list
+    }
 }

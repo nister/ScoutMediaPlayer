@@ -100,6 +100,7 @@ class DefaultPlayerViewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         viewBinding = FragmentDefaultPlayerViewBinding.inflate(layoutInflater, container, false)
+        viewBinding.setLifecycleOwner(this);
         vm = ViewModelProvider(this)[PlayerFragmentViewModel::class.java]
         vm.playerRepository = PlayerRepositoryImpl(requireActivity())
         viewBinding.viewModel = vm
