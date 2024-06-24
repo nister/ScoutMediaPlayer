@@ -4,9 +4,9 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class Song(
-    val songArtist: String,
-    val songTitle: String,
-    val songDuration: String,
+    val songArtist: String?,
+    val songTitle: String?,
+    val songDuration: String?,
     val songUri: String
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -31,10 +31,10 @@ data class Song(
     }
 
     override fun hashCode(): Int {
-        var result = songArtist.hashCode()
-        result = 31 * result + songTitle.hashCode()
-        result = 31 * result + songDuration.hashCode()
-        result = 31 * result + songUri.hashCode()
+        var result = songArtist?.hashCode() ?: 0
+        result = 31 * result + (songTitle?.hashCode() ?: 0)
+        result = 31 * result + (songDuration?.hashCode() ?: 0)
+        result = 31 * result + (songUri.hashCode())
         return result
     }
 

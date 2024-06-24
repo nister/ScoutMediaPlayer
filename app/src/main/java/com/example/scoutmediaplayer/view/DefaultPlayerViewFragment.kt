@@ -78,14 +78,14 @@ class DefaultPlayerViewFragment : Fragment() {
     }
 
     private fun updateMetadata() {
-        var metadataRetriever = MediaMetadataRetriever()
-        metadataRetriever.setDataSource(player.currentMediaItem?.localConfiguration?.uri.toString())
-        var artist = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
-        var title = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
-        Log.d(LOG_TAG, "updateMetadata artist: $artist")
-        Log.d(LOG_TAG, "updateMetadata title: $title")
-        vm.artist.value = artist
-        vm.title.value = title
+//        var metadataRetriever = MediaMetadataRetriever()
+//        metadataRetriever.setDataSource(requireActivity().assets.openFd(player.currentMediaItem?.localConfiguration?.uri.toString()).fileDescriptor)
+//        var artist = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
+//        var title = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
+//        Log.d(LOG_TAG, "updateMetadata artist: $artist")
+//        Log.d(LOG_TAG, "updateMetadata title: $title")
+//        vm.artist.value = artist
+//        vm.title.value = title
     }
 
     @OptIn(UnstableApi::class) override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

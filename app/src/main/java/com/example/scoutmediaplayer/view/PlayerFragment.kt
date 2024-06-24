@@ -15,7 +15,11 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.example.scoutmediaplayer.PlaybackService
 import com.example.scoutmediaplayer.databinding.FragmentPlayerBinding
 
-
+/**
+ * The idea of this class was to implement a custom view (info about author, song + cover + player controls),
+ * but I went with standart Exoplayer Player view due to the lack of time . I want to implement this eventually
+ * to get more understanding of Exoplayer and media3 overall
+**/
 class PlayerFragment : Fragment() {
 
     private var binder: PlaybackService.PlaybackServiceBinder? = null
