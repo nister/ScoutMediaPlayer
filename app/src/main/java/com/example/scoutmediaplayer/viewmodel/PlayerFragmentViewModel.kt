@@ -16,8 +16,4 @@ class PlayerFragmentViewModel : ViewModel() {
     val title: MutableLiveData<String> by lazy {
         MutableLiveData<String>("trackName")
     }
-
-    fun restorePrevSession() {
-        //
-    }
 }
