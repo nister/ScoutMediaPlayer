@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/library_fragment_header"
-            android:textSize="30sp"
+            android:textSize="28sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -42,6 +42,13 @@
                 android:layout_height="@dimen/playlist_toolbar_icon_size"
                 android:onClick="@{()->viewModel.addSongs()}"
                 android:src="@drawable/playlist_add" />
+
+            <ImageView
+                android:id="@+id/playlist_remote"
+                android:layout_width="@dimen/playlist_toolbar_icon_size"
+                android:layout_height="@dimen/playlist_toolbar_icon_size"
+                android:onClick="@{()->viewModel.addRemoteSongs()}"
+                android:src="@drawable/cloud" />
 
             <ImageView
                 android:id="@+id/playlist_clear"
