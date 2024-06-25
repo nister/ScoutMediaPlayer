@@ -40,6 +40,25 @@ class PlaylistFragmentViewModel : ViewModel() {
         }
     }
 
+    fun addRemoteSongs() {
+        var listener = object : SongListItemViewModel.OnSongSelectedListener {
+            override fun onSongSelected(id: Int, song: Song) {
+                contract.onSongSelected(id, song)
+            }
+        }
+        viewModelScope.launch {
+            val newSongs = songRepository.getStubSongs()
+            songsViewModels.clear()
+            songsViewModels.addAll(newSongs.map {
+                SongListItemViewModel(
+                    newSongs.indexOf(it),
+                    it,
+                    listener
+                )
+            })
+        }
+    }
+
     fun clearPlaylist() {
         songsViewModels.clear()
     }

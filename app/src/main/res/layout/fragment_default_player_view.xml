@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.example.scoutmediaplayer.viewmodel.PlayerFragmentViewModel" />
@@ -17,31 +19,36 @@
 
         <TextView
             android:id="@+id/player_song_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:textSize="@dimen/player_song_title_text_size"
+            android:maxLines="1"
             android:text="@{viewModel.title}"
+            android:textAlignment="center"
+            android:textSize="@dimen/player_song_title_text_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Stub ong name" />
 
         <TextView
-            tools:text="Stub author"
-            android:textSize="@dimen/player_song_author_text_size"
             android:id="@+id/player_song_author"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             android:text="@{viewModel.artist}"
+            android:textAlignment="center"
+            android:textSize="@dimen/player_song_author_text_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/player_song_title" />
+            app:layout_constraintTop_toBottomOf="@id/player_song_title"
+            tools:text="Stub author" />
 
         <androidx.media3.ui.PlayerView
             android:id="@+id/player_view"
             android:layout_width="wrap_content"
             android:layout_height="250dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/player_song_author" />
