@@ -33,7 +33,7 @@ class DefaultPlayerViewFragment : Fragment() {
     private lateinit var sessionToken: SessionToken
 
     companion object {
-        const val LOG_TAG = "PlaylistFragment"
+        const val LOG_TAG = "DefaultPlayerViewFragment"
     }
 
     override fun onStart() {
@@ -78,17 +78,26 @@ class DefaultPlayerViewFragment : Fragment() {
     }
 
     private fun updateMetadata() {
-//        var metadataRetriever = MediaMetadataRetriever()
-//        metadataRetriever.setDataSource(requireActivity().assets.openFd(player.currentMediaItem?.localConfiguration?.uri.toString()).fileDescriptor)
-//        var artist = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
-//        var title = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
-//        Log.d(LOG_TAG, "updateMetadata artist: $artist")
-//        Log.d(LOG_TAG, "updateMetadata title: $title")
-//        vm.artist.value = artist
-//        vm.title.value = title
+        val metadataRetriever = MediaMetadataRetriever()
+        val uriStr = player.currentMediaItem?.localConfiguration?.uri.toString()
+        if (uriStr.startsWith("asset")) {
+            var file =
+                requireActivity().assets.openFd(uriStr.replace("asset:///android_asset/", ""))
+            metadataRetriever.setDataSource(file.fileDescriptor, file.startOffset, file.length)
+        } else {
+            metadataRetriever.setDataSource(player.currentMediaItem?.localConfiguration?.uri.toString())
+        }
+
+        val artist = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
+        val title = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
+        Log.d(LOG_TAG, "updateMetadata artist: $artist")
+        Log.d(LOG_TAG, "updateMetadata title: $title")
+        vm.artist.value = artist
+        vm.title.value = title
     }
 
-    @OptIn(UnstableApi::class) override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    @OptIn(UnstableApi::class)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         playerView = view.findViewById(R.id.player_view)
         // Disabled due to the requirements
